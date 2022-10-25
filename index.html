@@ -10,24 +10,28 @@
 </head>
 <body>
     <header>
-        <h1>Coin Counter</h1>
+        <input type="checkbox" id="lblModoNoturno"/>
+        <label for="lblModoNoturno"></label>
+        <h1>
+            Coin Counter            
+        </h1>
     </header>
     <div id="totalBar">
         <div id="totalContainer">
             <div>
                 <b>TOTAL</b>
-                <span id="idTotalDinheiro">R&dollar;00,00</span>
-                <button>limpar</button>
+                <span id="idTotalDinheiro">00,00</span>
+                <button onclick="ApagarTodos()">limpar</button>
             </div>
             <div>
                 <b>CÉDULAS</b>
                 <span id="idTotalCedulas">R&dollar;00,00</span>
-                <button>limpar</button>
+                <button onclick="ApagarParte('cedulas')">limpar</button>
             </div>
             <div>
                 <b>MOEDAS</b>
                 <span id="idTotalMoedas">R&dollar;00,00</span>
-                <button>limpar</button>
+                <button onclick="ApagarParte('moedas')">limpar</button>
             </div>
         </div>
     </div>

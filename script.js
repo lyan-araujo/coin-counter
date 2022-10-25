@@ -3,88 +3,101 @@ window.addEventListener('load', (event) =>{
 });
 
 function CriarModelos() {
-    let container = document.getElementById('container');
-    let Modelos = ListaModelos();
+    let container = document.querySelector('#container');
+    let Modelos = _Dinheiro.getModelos();
     if(Modelos){
         for (const modelo of Modelos) {
-            let [div_container, label_img, img, label_val, input_val, span_total, btn_clear, img2, span_atalho] = [
-                document.createElement('div'),
-                document.createElement('label'),
-                document.createElement('img'),
-                document.createElement('label'),
-                document.createElement('input'),
-                document.createElement('span'),
-                document.createElement('button'),
-                document.createElement('img'),
-                document.createElement('span')
-            ];
-            // div_container
-            div_container.classList.add('container_dinheiro');
-
-            // label_img
-            label_img.setAttribute('for', modelo.id);
-            label_img.classList.add('labelImg');
-            // img
-            img.setAttribute('src', modelo.img);
-            img.setAttribute('onclick',`(${modelo.id}.value++)`);
-
-            label_img.appendChild(img);
-            div_container.appendChild(label_img);
-            // label_val
-            label_val.setAttribute('for', modelo.id);
-            label_val.classList.add('labelValue');
-            label_val.textContent = `${modelo.valor < 1 ? "¢" : "R$"}${modelo.valor}`;
-
-            div_container.appendChild(label_val);
-            //input_val
-            input_val.setAttribute('type','number');
-            input_val.setAttribute('min','0');
-            input_val.setAttribute('value','0');
-            input_val.setAttribute('max','999999999999');
-            input_val.setAttribute('id', modelo.id);
-            input_val.classList.add('inputValue');
-
-            div_container.appendChild(input_val);
-            // span_total
-            span_total.classList.add('spanTotal');
-            span_total.setAttribute('data-span-for', modelo.id);
-            span_total.textContent = "Total: R$00,00";
-
-            div_container.appendChild(span_total);
-            // btn_clear
-            btn_clear.classList.add('btnLimparUm');
-            // img2
-            img2.setAttribute('src','img/trash_placeholder.png');
-
-            btn_clear.appendChild(img2);
-            div_container.appendChild(btn_clear);
-            // span_atalho
-            span_atalho.classList.add('spanAtalho');
-            span_atalho.textContent = modelo.atalho;
-
-            div_container.appendChild(span_atalho);
-            container.appendChild(div_container);
-
-            // <div class="container_dinheiro">
-            ///     <label for="idVal" class="labelImg"><img src="img/moeda_placeholder.png" onclick="(idVal.value++)"></label>
-            ///     <label for="idVal" class="labelValue">&cent;0.01</label>
-            ///     <input type="number" id="idVal" class="inputValue">
-            ///     <span class="spanTotal" data-span-for="idVal">Total: &cent; 00.00</span>
-            //     <button class="btnLimparUm"><img src="img/trash_placeholder.png" alt=""></button>
-            //     <span class="spanAtalho">W</span>
-            // </div>
-
+            let htmlContainer =`
+            <div class="container_dinheiro">
+                <label for="${modelo.id}" class="labelImg"><img src="${modelo.img}" onclick="(${modelo.id}.value++), AtualizaValor(${modelo.id})"></label>
+                <label for="${modelo.id}" class="labelValue">${ConvertToBRL(modelo.valor)}</label>
+                <input type="number" min="0" value="0" max="10000000000000000" id="${modelo.id}" class="inputValue">
+                <input type="text" class="spanTotal" value="Total: R$ 0,00" data-span-for="${modelo.id}" readonly/>
+                <button class="btnLimparUm" onclick="ApagarUm(${modelo.id})"><img src="img/trash_placeholder.png"/></button>
+                <span class="spanAtalho">${modelo.atalho}</span>
+            </div>
+            ` 
+            container.insertAdjacentHTML("beforeend", htmlContainer);
         }
+        ChangeInput();
     }
 }
 
-function ListaModelos() {
-    let Modelos = [
+function ChangeInput() {
+    let _inputs = document.querySelectorAll('.inputValue');
+
+    _inputs.forEach(inputAtual =>{
+        inputAtual.addEventListener('input', ()=> AtualizaValor(inputAtual));
+         // inputAtual.addEventListener('paste', ()=> AtualizaValor(inputAtual.id));
+    });
+}
+
+function AtualizaValor(DOMInput){
+    if((DOMInput.value == "")||(!DOMInput.value)){
+        DOMInput.value = parseInt(DOMInput.getAttribute('min'), 10);
+    }
+
+    if(DOMInput.value > parseInt(DOMInput.max)){
+        DOMInput.value = Math.min(parseInt(DOMInput.max), parseInt(DOMInput.value) || 0);
+    }
+
+    _Dinheiro.setModelos();
+}
+
+function ApagarTodos() {
+    let _inptValues = document.querySelectorAll('.inputValue');
+    for (const _inptValue of _inptValues) {
+            _inptValue.value = 0;
+    }
+    _Dinheiro.setModelos();
+}
+
+function ApagarParte(ModeloAtual) {
+    let _inptValues = document.querySelectorAll('.inputValue');
+    let _modelos = _Dinheiro.getModelos();
+
+    if(ModeloAtual) {
+        for (const _inputValue of _inptValues) {
+            for (const _modelo of _modelos) {
+                if (_modelo.id == _inputValue.id) {
+                    if(ModeloAtual == "moedas") {
+                        _inputValue.value = (_modelo.valor <= 1 ? 0 : _inputValue.value);
+                    }
+                    if(ModeloAtual == "cedulas") {
+                        _inputValue.value = (_modelo.valor > 1 ? 0 : _inputValue.value);            
+                    }
+                    
+                }
+            }
+        }
+
+    }
+
+    _Dinheiro.setModelos();
+}
+
+function ApagarUm(DOMInput) {
+    if(DOMInput){
+        DOMInput.value = 0;
+    }
+
+    _Dinheiro.setModelos();
+}
+
+
+// RECEBE UM VALOR E RETORNA CONVERTIDO PARA O FORMATO DA MOEDA BRASILEIRA
+function ConvertToBRL(INT_VALUE) {
+    let _intValue = INT_VALUE.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+    return _intValue;
+}
+
+let _Dinheiro = {
+    _DadosDinheiro : [
         {   
             
             // <!-- id, img, valor, total, atalho -->
             id : "umCent",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/1_centavo.png',
             valor : 0.01,
             total : 0,
             atalho : "Q"
@@ -93,7 +106,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "cincoCent",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/5_centavos.png',
             valor : 0.05,
             total : 0,
             atalho : "W"
@@ -102,7 +115,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "dezCent",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/10_centavos.png',
             valor : 0.10,
             total : 0,
             atalho : "E"
@@ -111,7 +124,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "vinCinCent",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/25_centavos.png',
             valor : 0.25,
             total : 0,
             atalho : "R"
@@ -120,7 +133,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "cinquentaCent",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/50_centavos.png',
             valor : 0.50,
             total : 0,
             atalho : "T"
@@ -129,7 +142,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "umReal",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/1_real.png',
             valor : 1,
             total : 0,
             atalho : "Y"
@@ -138,7 +151,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "doisReais",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/02_reais.png',
             valor : 2,
             total : 0,
             atalho : "A"
@@ -147,7 +160,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "cincoReais",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/05_reais.png',
             valor : 5,
             total : 0,
             atalho : "S"
@@ -156,7 +169,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "dezReais",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/10_reais.png',
             valor : 10,
             total : 0,
             atalho : "D"
@@ -165,7 +178,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "vinteReais",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/20_reais.png',
             valor : 20,
             total : 0,
             atalho : "F"
@@ -174,7 +187,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "cinquentaReais",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/50_reais.png',
             valor : 50,
             total : 0,
             atalho : "G"
@@ -183,7 +196,7 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "cemReais",
-            img : 'img/moeda_placeholder.png',
+            img : 'img/100_reais.png',
             valor : 100,
             total : 0,
             atalho : "H"
@@ -192,11 +205,66 @@ function ListaModelos() {
             
             // <!-- id, img, valor, total, atalho -->
             id : "duzentosReais",
-            img : 'img/cédula_placeholder.png',
+            img : 'img/200_reais.png',
             valor : 200,
             total : 0,
             atalho : "J"
         }
-    ];
-    return Modelos;
-}
+    ],
+    _ValorTotal : {
+        totalDinheiro : 0,
+        totalCedulas : 0,
+        totalMoedas: 0
+    },
+    getModelos : ()=>{
+        return _Dinheiro._DadosDinheiro;
+    },
+    setModelos : ()=>{
+        let _inptValues = document.querySelectorAll('.inputValue');
+        let _modelos = _Dinheiro.getModelos();
+        let [_ttlCedula, _ttlMoeda] = [0,0];
+        let _valoresTotais = _Dinheiro._ValorTotal;
+        
+        //ATRIBUI O VALOR TOTAL DOS MODELOS RELATIVO A MULTIPLICAÇÃO DO VALOR DO INPULT COM O VALOR DA MOEDA (3 MOEDAS DE 25 = 3 x 0.25)
+        for (const _inptValue of _inptValues) {
+            for (const _modelo of _modelos) {
+                if (_inptValue.id == _modelo.id) {
+                    _modelo.total = (_inptValue.value * _modelo.valor);
+                    
+                    if(_modelo.valor <=1){
+                        _ttlMoeda += _modelo.total;
+                    } else {
+                        _ttlCedula += _modelo.total;
+                    }
+                }
+            }            
+        }
+
+        _valoresTotais.totalDinheiro = (_ttlCedula + _ttlMoeda);
+        _valoresTotais.totalCedulas = _ttlCedula;
+        _valoresTotais.totalMoedas = _ttlMoeda;
+
+        _Dinheiro.atualizaModelos();
+    },
+    atualizaModelos : () =>{
+        let [_Modelos, _DisplayModelosTotais] = [_Dinheiro.getModelos(), document.querySelectorAll('.spanTotal')];
+        let [_DisplayTotalDinheiro, _DisplayTotalCedula, _DisplayTotalMoeda] = [
+            document.querySelector('#idTotalDinheiro'),
+            document.querySelector('#idTotalCedulas'),
+            document.querySelector('#idTotalMoedas')
+        ];
+        // ATUALIZAR DISPLAY DE VALORES TOTAIS 
+        _DisplayTotalDinheiro.textContent  = ConvertToBRL(_Dinheiro._ValorTotal.totalDinheiro);
+        _DisplayTotalCedula.textContent = ConvertToBRL(_Dinheiro._ValorTotal.totalCedulas);
+        _DisplayTotalMoeda.textContent = ConvertToBRL(_Dinheiro._ValorTotal.totalMoedas);
+
+        //ATUALIZA VALORES INDIVIDUAIS
+        for (const modelo of _Modelos) {
+            for (const display of _DisplayModelosTotais) {
+                if(modelo.id == display.getAttribute('data-span-for')){
+                    display.value = `Total: ${ConvertToBRL(modelo.total)}`;
+                }
+            }
+        }
+    }
+};
