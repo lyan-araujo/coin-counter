@@ -1,34 +1,43 @@
+let g_ckModoNoturno = document.getElementById('lblModoNoturno');
+
+// FUNÇÃO DO MODO NOTURNO
+g_ckModoNoturno.addEventListener('change',(e) => {
+    // PEGA O ELEMENTO QUE CONTEM O PSEUDO-ATRIBUTO 'data-theme-color' E MUDA O VALOR DO MESMO ATRIBUTO COM BASE NO ESTADO DO g_ckModoNoturno
+    document.querySelector('[data-theme-color]').setAttribute('data-theme-color', (g_ckModoNoturno.checked ? 'light' : 'dark'));
+});
+
+// CARREGA QUANDO A PÁGINA É CARREGADA
 window.addEventListener('load', (event) =>{
     CriarModelos();
 });
 
+// CRIA AS CÉCULAS DE MODELO DAS MOEDAS COM BASE NOS DADOS OBTIDOS PELA FUNÇÃO '_Dineiro.getModelos()'
 function CriarModelos() {
-    let container = document.querySelector('#container');
-    let Modelos = _Dinheiro.getModelos();
-    if(Modelos){
-        for (const modelo of Modelos) {
-            let htmlContainer =`
+    let _container = document.querySelector('#container');
+    let _modelos = _Dinheiro.getModelos();
+    if(_modelos){
+        for (const _modelo of _modelos) {
+            let _htmlContainer =`
             <div class="container_dinheiro">
-                <label for="${modelo.id}" class="labelImg"><img src="${modelo.img}" onclick="(${modelo.id}.value++), AtualizaValor(${modelo.id})"></label>
-                <label for="${modelo.id}" class="labelValue">${ConvertToBRL(modelo.valor)}</label>
-                <input type="number" min="0" value="0" max="10000000000000000" id="${modelo.id}" class="inputValue">
-                <input type="text" class="spanTotal" value="Total: R$ 0,00" data-span-for="${modelo.id}" readonly/>
-                <button class="btnLimparUm" onclick="ApagarUm(${modelo.id})"><img src="img/trash_placeholder.png"/></button>
-                <span class="spanAtalho">${modelo.atalho}</span>
+                <label for="${_modelo.id}" class="labelImg"><img src="${_modelo.img}" onclick="(${_modelo.id}.value++), AtualizaValor(${_modelo.id})"></label>
+                <label for="${_modelo.id}" class="labelValue">${ConvertToBRL(_modelo.valor)}</label>
+                <input type="number" min="0" value="0" max="10000000000000000" id="${_modelo.id}" class="inputValue">
+                <input type="text" class="spanTotal" value="Total: R$ 0,00" data-span-for="${_modelo.id}" readonly/>
+                <button class="btnLimparUm" onclick="ApagarUm(${_modelo.id})"><img src="img/trash_placeholder.png"/></button>
+                <span class="spanAtalho">${_modelo.atalho}</span>
             </div>
             ` 
-            container.insertAdjacentHTML("beforeend", htmlContainer);
+            _container.insertAdjacentHTML("beforeend", _htmlContainer);
         }
         ChangeInput();
     }
 }
 
 function ChangeInput() {
-    let _inputs = document.querySelectorAll('.inputValue');
+    let _inptValues = document.querySelectorAll('.inputValue');
 
-    _inputs.forEach(inputAtual =>{
-        inputAtual.addEventListener('input', ()=> AtualizaValor(inputAtual));
-         // inputAtual.addEventListener('paste', ()=> AtualizaValor(inputAtual.id));
+    _inptValues.forEach(_inputAtual =>{
+        _inputAtual.addEventListener('input', ()=> AtualizaValor(_inputAtual));
     });
 }
 
@@ -254,9 +263,9 @@ let _Dinheiro = {
             document.querySelector('#idTotalMoedas')
         ];
         // ATUALIZAR DISPLAY DE VALORES TOTAIS 
-        _DisplayTotalDinheiro.textContent  = ConvertToBRL(_Dinheiro._ValorTotal.totalDinheiro);
-        _DisplayTotalCedula.textContent = ConvertToBRL(_Dinheiro._ValorTotal.totalCedulas);
-        _DisplayTotalMoeda.textContent = ConvertToBRL(_Dinheiro._ValorTotal.totalMoedas);
+        _DisplayTotalDinheiro.value  = ConvertToBRL(_Dinheiro._ValorTotal.totalDinheiro);
+        _DisplayTotalCedula.value = ConvertToBRL(_Dinheiro._ValorTotal.totalCedulas);
+        _DisplayTotalMoeda.value = ConvertToBRL(_Dinheiro._ValorTotal.totalMoedas);
 
         //ATUALIZA VALORES INDIVIDUAIS
         for (const modelo of _Modelos) {

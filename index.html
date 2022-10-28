@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-theme-color="dark">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,17 +20,17 @@
         <div id="totalContainer">
             <div>
                 <b>TOTAL</b>
-                <span id="idTotalDinheiro">00,00</span>
+                <input type='text' value="R$ 0,00" id="idTotalDinheiro" readonly/>
                 <button onclick="ApagarTodos()">limpar</button>
             </div>
             <div>
                 <b>CÉDULAS</b>
-                <span id="idTotalCedulas">R&dollar;00,00</span>
+                <input type='text' value="R$ 0,00" id="idTotalCedulas" readonly/>
                 <button onclick="ApagarParte('cedulas')">limpar</button>
             </div>
             <div>
                 <b>MOEDAS</b>
-                <span id="idTotalMoedas">R&dollar;00,00</span>
+                <input type='text' value="R$ 0,00" id="idTotalMoedas" readonly/>
                 <button onclick="ApagarParte('moedas')">limpar</button>
             </div>
         </div>

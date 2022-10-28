@@ -3,11 +3,22 @@
     max-width: 100%;
 }
 
-*:root{
+[data-theme-color='dark']:root, :root{
     color-scheme: dark;
     --primary-color: #000000;
-    --secondary-color: #06070d;
-    --terciary-color: #0d0e1a;
+    --secondary-color: #131313;
+    --tertiary-color: #262626;
+    --revert-color: #efefef;
+}
+
+
+
+[data-theme-color='light']:root{
+    color-scheme: light;
+    --primary-color: #fcfcfc;
+    --secondary-color: #d0d0d0;
+    --tertiary-color: #bcbcbc;
+    --revert-color: #000000;
 }
 
 html, body{
@@ -18,7 +29,8 @@ html, body{
 
 header{
     text-align: center;
-    border: 1px solid yellow;
+    background-color: var(--primary-color);
+    border-bottom: 1px solid var(--revert-color);
 }
 
 input#lblModoNoturno{
@@ -44,9 +56,8 @@ input#lblModoNoturno{
     display: block;
     width: 80%;
     aspect-ratio: 1 / 1;
-    background-color: black;
+    background-color: var(--primary-color);
     border-radius: 1rem;
-    /* box-shadow: 0px 0px 0px 4px black; */
     transition: 500ms;
 }
 
@@ -68,21 +79,20 @@ input#lblModoNoturno{
     aspect-ratio: 1 / 1;
     background-color: orange;
     border-radius: 1rem;
-    box-shadow: 0px 0px 0px 4px black;
+    box-shadow: 0px 0px 0px 4px var(--primary-color);
 }
 
 #totalBar{
     position: sticky;
     top: 0%;
-    border: 1px solid red;    
+    background: linear-gradient(180deg, var(--primary-color) 95%, transparent);
 }
 
 #totalContainer{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    border: 1px solid green;
-    max-width: 1000px;
+    max-height: 100%;
     margin: 10px auto;
     padding: 10px;
 }
@@ -90,26 +100,45 @@ input#lblModoNoturno{
 #totalContainer div{
     display: grid;
     grid-template-columns: 1fr;
-    border: 1px solid yellow;    
+    gap: 6px;
+    max-width: 100%;
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    padding: 8px 5px;
+}
+
+#totalContainer div b{
+    padding: 2px 8px;
 }
 
 #totalContainer div #idTotalDinheiro, #idTotalCedulas, #idTotalMoedas{
     font-size: large;
     text-align: center;
-    border: 1px solid purple;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    background: var(--tertiary-color);
 }
 
+#totalContainer div button{
+    border: none;
+    background-color: var(--tertiary-color);
+    border-radius: 5px;
+    padding: 3px;
+}
 
 main{
-    border: 1px solid red;
+    border: 3px solid var(--primary-color);
+    background-color: var(--secondary-color);
+    box-shadow: 0px 0px 0px 2px var(--secondary-color);
+    border-radius: 5px;
     max-width: 1000px;
-    margin: auto;
+    margin: auto auto 2rem auto;
 }
 
 #container{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    border: 1px solid green;
     max-width: 100%;
     padding: 5px;
     gap: 10px;
@@ -122,14 +151,15 @@ main{
     gap: 5px 8px;
     padding: 5px;
     max-width: 100%;
-    border: 1px solid blue;
+    border-radius: 4px;
+    border: 3px solid var(--tertiary-color);
+    background-color: var(--secondary-color);
 }
 
 #container .container_dinheiro > .labelImg{
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid yellow;
     grid-column: 1 / 8;
     grid-row: 1 / 7;
 }
@@ -141,21 +171,28 @@ main{
 }
 
 #container .container_dinheiro > .labelValue{
-    border: 1px solid red;
+    border: 2px solid var(--tertiary-color);
+    border-radius: 4px;
+    padding: 2px 4px;
+    overflow: hidden;
     grid-column: 1 / 4;
     grid-row: 7;
 }
 
 #container .container_dinheiro > .inputValue{
-    border: 1px solid purple;
+    border: 2px solid var(--tertiary-color);
+    background-color: var(--tertiary-color);
+    border-radius: 4px;
     text-align: right;
     grid-column: 4 / 8;
     grid-row: 7;
 }
 
 #container .container_dinheiro > .spanTotal{
-    background: red;
-    border: 1px solid red;
+    border: 2px solid var(--tertiary-color);
+    background-color: var(--secondary-color);
+    border-radius: 4px;
+    padding: 2px 4px;
     grid-column: 1 / 7;
     grid-row: 8;
     white-space: nowrap;
@@ -163,14 +200,23 @@ main{
 }
 
 #container .container_dinheiro > .btnLimparUm{
-    border: 1px solid green;
+    background-color: var(--tertiary-color);
+    border: none;
+    border-radius: 4px;
     grid-column: 7;
     grid-row: 8;
 }
 
 #container .container_dinheiro > .spanAtalho{
     display: block;
-    border: 1px solid brown;
+    text-align: center;
+    border-width: 2px 5px 5px 2px;
+    border-style: inset;
+    border-color: #333333;
+    border-radius: 2px;
+    box-shadow: 0px 0px 1px black;
+    background: black;
+    color: #efefef;
     grid-column: 7;
     grid-row: 1;
     aspect-ratio: 1 / 1;
