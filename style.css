@@ -1,18 +1,24 @@
 * {
     box-sizing: border-box;
     max-width: 100%;
+    font-family: 'Times New Roman', Times, serif;
 }
 
+/* VALORES DO MODO DARK (PADRÃO) */
 [data-theme-color='dark']:root, :root{
     color-scheme: dark;
     --primary-color: #000000;
     --secondary-color: #131313;
     --tertiary-color: #262626;
     --revert-color: #efefef;
+    
+    --totalContainer-grid-template-columns: repeat(3, 1fr);
+    --container-grid-template-columns: repeat(4, 1fr);
+    --totalBar-position: sticky;
+    --pocket-total-display: none;
 }
 
-
-
+/* VALORES DO MODO LIGHT */
 [data-theme-color='light']:root{
     color-scheme: light;
     --primary-color: #fcfcfc;
@@ -25,6 +31,7 @@ html, body{
     background-color: var(--primary-color);
     padding: 0%;
     margin: 0%;
+    scroll-behavior: smooth;
 }
 
 header{
@@ -33,11 +40,264 @@ header{
     border-bottom: 1px solid var(--revert-color);
 }
 
+header #title{
+    cursor: default;
+}
+
+#totalBar{
+    position: var(--totalBar-position);
+    top: 0%;
+    background-color: var(--primary-color);
+    opacity: 99%;
+    z-index: 1;
+}
+
+#totalContainer{
+    display: grid;
+    grid-template-columns: var(--totalContainer-grid-template-columns);
+    gap: 10px;
+    max-height: 100%;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+#totalContainer div{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    max-width: 100%;
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    padding: 8px 5px;
+    grid-auto-flow: row;
+}
+
+#totalContainer div b{
+    cursor: default;
+    padding: 2px 8px;
+}
+
+#totalContainer div #idTotalDinheiro, #idTotalCedulas, #idTotalMoedas{
+    font-size: large;
+    text-align: center;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    background: var(--tertiary-color);
+}
+
+#totalContainer div button{
+    border: none;
+    background-color: var(--tertiary-color);
+    border-radius: 5px;
+    padding: 3px;
+    cursor: pointer;
+    font-size: medium;
+}
+
+#totalContainer div button:hover{
+    transition: transform 200ms;
+    box-shadow: 0px 0px 5px 1px var(--primary-color);
+}
+
+#pocketTotalBar{
+    position: fixed;
+    top: 3px;
+    left: 3px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+    max-width: 768px;
+    z-index: 1;
+}
+
+#pocketTotalBar > #idPocketTotalDinheiro, #idPocketTotalCedulas, #idPocketTotalMoedas{
+    display: var(--pocket-total-display);
+    max-width: 100%;
+    text-overflow: ellipsis;
+    width: fit-content;
+    background-color: var(--tertiary-color);
+    border: 2px solid var(--secondary-color);
+    box-shadow: 2px 2px 2px var(--primary-color);
+    border-radius: 5px;
+    padding: 2px 4px;
+    font-size: medium;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+main{
+    border: 3px solid var(--primary-color);
+    background-color: var(--secondary-color);
+    box-shadow: 0px 0px 0px 2px var(--secondary-color);
+    border-radius: 5px;
+    max-width: 1000px;
+    margin: auto auto 2rem auto;
+}
+
+#container{
+    display: grid;
+    grid-template-columns: var(--container-grid-template-columns);
+    max-width: 100%;
+    padding: 5px;
+    gap: 10px;
+}
+
+#container .container_dinheiro{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px 8px;
+    padding: 5px;
+    min-width: 200px;
+    max-width: 350px;
+    border-radius: 4px;
+    border: 3px solid var(--tertiary-color);
+    background-color: var(--secondary-color);
+    box-shadow: 1px 1px 5px 2px var(--primary-color);
+    margin: auto;
+}
+
+#container .container_dinheiro > .labelImg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column: 1 / 8;
+    grid-row: 1;
+    cursor: pointer;
+}
+
+#container .container_dinheiro > .labelImg > img{
+    display: block;
+    width: auto;
+    max-height: 140px;
+}
+
+#container .container_dinheiro > .labelImg > img:hover{
+    transform: scale(1.1);
+    transition: transform 300ms;
+    filter: drop-shadow(0px 0px 5px var(--revert-color));
+}
+
+#container .container_dinheiro > .labelValue{
+    border: 2px solid var(--tertiary-color);
+    border-radius: 4px;
+    padding: 2px 4px;
+    overflow: hidden;
+    grid-column: 1 / 4;
+    grid-row: 2;
+    height: 1.5rem;
+}
+
+#container .container_dinheiro > .inputValue{
+    border: 2px solid var(--tertiary-color);
+    background-color: var(--tertiary-color);
+    border-radius: 4px;
+    text-align: right;
+    grid-column: 4 / 8;
+    grid-row: 2;
+}
+
+#container .container_dinheiro > .spanTotal{
+    border: 2px solid var(--tertiary-color);
+    background-color: var(--secondary-color);
+    border-radius: 4px;
+    padding: 2px 4px;
+    grid-column: 1 / 7;
+    grid-row: 3;
+    white-space: nowrap;
+    overflow-y: auto;
+}
+
+#container .container_dinheiro > .btnLimparUm{
+    background-color: var(--tertiary-color);
+    border: none;
+    border-radius: 4px;
+    grid-column: 7;
+    grid-row: 3;
+    cursor: pointer;
+    min-width: 25px;
+}
+
+#container .container_dinheiro > .btnLimparUm img{
+    filter: drop-shadow(0px 0px 1px white);
+    transform: scale(1.5);
+}
+
+#container .container_dinheiro > .spanAtalho{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    text-align: center;
+    border-width: 1px 5px 5px 1px;
+    border-style: solid;
+    border-color:var(--tertiary-color) var(--primary-color);
+    border-radius: 2px;
+    box-shadow: 0px 0px 4px var(--primary-color);
+    background: var(--secondary-color);
+    grid-column: 7;
+    grid-row: 1;
+    aspect-ratio: 1 / 1;
+    cursor: default;
+    opacity: 80%;    
+}
+
+/* FOOTER */
+footer{
+    border-style: solid;
+    border-color: var(--revert-color);
+    border-width: 1px 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* OS PEQUENOS BOTÕES FLUTUANTES NO CANTO INFERIOR ESQUERDO DA TELA */
+#toolsBar{
+    display: grid;
+    position: fixed;
+    left: 5px;
+    bottom: 8px;
+    border-radius: 10px;
+    max-width: max-content;
+    grid-template-columns: repeat(2, 1fr);
+    border: 2px solid var(--primary-color);
+    background-color: var(--secondary-color);
+    box-shadow: 0px 0px 0px 2px var(--secondary-color);
+    opacity: 90%;
+}
+
+#toolsBar .toolbarContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px 3px;
+    background-color: var(--secondary-color);
+    cursor: pointer;
+}
+
+#toolsBar .toolbarContainer:nth-child(1){
+    border-radius: 10px 0px 0px 10px
+}
+
+#toolsBar .toolbarContainer:nth-child(2){
+    border-radius: 0px 10px 10px 0px
+}
+
+#toolsBar .toolbarContainer:hover{
+    transform: scale(1.1);
+    transition: transform 200ms;
+    box-shadow: 0px 0px 8px var(--tertiary-color);
+    z-index: 1;
+}
+
 input#lblModoNoturno{
     display: none;
 }
 
 #lblModoNoturno ~ label[for='lblModoNoturno']{
+    cursor: pointer;
     float: left;
     content: "";
     display: flex;
@@ -56,7 +316,7 @@ input#lblModoNoturno{
     display: block;
     width: 80%;
     aspect-ratio: 1 / 1;
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     border-radius: 1rem;
     transition: 500ms;
 }
@@ -79,145 +339,58 @@ input#lblModoNoturno{
     aspect-ratio: 1 / 1;
     background-color: orange;
     border-radius: 1rem;
-    box-shadow: 0px 0px 0px 4px var(--primary-color);
+    box-shadow: 0px 0px 0px 4px var(--secondary-color);
 }
 
-#totalBar{
-    position: sticky;
-    top: 0%;
-    background: linear-gradient(180deg, var(--primary-color) 95%, transparent);
+input#lblAtalhosTeclado{
+    display: none;
 }
 
-#totalContainer{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    max-height: 100%;
-    margin: 10px auto;
-    padding: 10px;
-}
-
-#totalContainer div{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 6px;
-    max-width: 100%;
-    background-color: var(--secondary-color);
-    border-radius: 10px;
-    padding: 8px 5px;
-}
-
-#totalContainer div b{
-    padding: 2px 8px;
-}
-
-#totalContainer div #idTotalDinheiro, #idTotalCedulas, #idTotalMoedas{
-    font-size: large;
-    text-align: center;
-    border: none;
-    padding: 5px;
-    border-radius: 5px;
-    background: var(--tertiary-color);
-}
-
-#totalContainer div button{
-    border: none;
-    background-color: var(--tertiary-color);
-    border-radius: 5px;
-    padding: 3px;
-}
-
-main{
-    border: 3px solid var(--primary-color);
-    background-color: var(--secondary-color);
-    box-shadow: 0px 0px 0px 2px var(--secondary-color);
-    border-radius: 5px;
-    max-width: 1000px;
-    margin: auto auto 2rem auto;
-}
-
-#container{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    max-width: 100%;
-    padding: 5px;
-    gap: 10px;
-}
-
-#container .container_dinheiro{
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(7, 1fr);
-    gap: 5px 8px;
-    padding: 5px;
-    max-width: 100%;
-    border-radius: 4px;
-    border: 3px solid var(--tertiary-color);
-    background-color: var(--secondary-color);
-}
-
-#container .container_dinheiro > .labelImg{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    grid-column: 1 / 8;
-    grid-row: 1 / 7;
-}
-
-#container .container_dinheiro > .labelImg > img{
+label[for='lblAtalhosTeclado']{
     display: block;
-    width: auto;
-    max-height: 140px;
-}
-
-#container .container_dinheiro > .labelValue{
-    border: 2px solid var(--tertiary-color);
-    border-radius: 4px;
-    padding: 2px 4px;
-    overflow: hidden;
-    grid-column: 1 / 4;
-    grid-row: 7;
-}
-
-#container .container_dinheiro > .inputValue{
-    border: 2px solid var(--tertiary-color);
-    background-color: var(--tertiary-color);
-    border-radius: 4px;
-    text-align: right;
-    grid-column: 4 / 8;
-    grid-row: 7;
-}
-
-#container .container_dinheiro > .spanTotal{
-    border: 2px solid var(--tertiary-color);
-    background-color: var(--secondary-color);
-    border-radius: 4px;
-    padding: 2px 4px;
-    grid-column: 1 / 7;
-    grid-row: 8;
-    white-space: nowrap;
-    overflow-y: auto;
-}
-
-#container .container_dinheiro > .btnLimparUm{
-    background-color: var(--tertiary-color);
-    border: none;
-    border-radius: 4px;
-    grid-column: 7;
-    grid-row: 8;
-}
-
-#container .container_dinheiro > .spanAtalho{
-    display: block;
+    font-weight: 600;
+    font-size: small;
     text-align: center;
-    border-width: 2px 5px 5px 2px;
-    border-style: inset;
-    border-color: #333333;
-    border-radius: 2px;
-    box-shadow: 0px 0px 1px black;
-    background: black;
-    color: #efefef;
-    grid-column: 7;
-    grid-row: 1;
-    aspect-ratio: 1 / 1;
+    border-width: 2px;
+    border-style: solid;
+    border-color:var(--tertiary-color) ;
+    border-radius: 4px;
+    background: var(--secondary-color);
+    cursor: pointer;
+    padding: 5px;
+    filter: none;
+}
+
+#lblAtalhosTeclado:checked ~ label[for='lblAtalhosTeclado']{
+    filter: brightness(1.3);
+}
+
+
+/* ALTERA OS VALORES CONFORME O TAMANHO DA TELA PARA SE ADAPTAR TANTO A DISPOSITIVOS MOVEIS COMO PCS, NOTEBOOKS ETC ETC */
+/* resize para notebook */
+@media only screen and (max-width: 992px){
+    [data-theme-color='dark']:root, :root{
+        --totalBar-position: sticky;
+        --pocket-total-display: none;
+        --totalContainer-grid-template-columns: repeat(3, 1fr);
+        --container-grid-template-columns: repeat(3, 1fr);    
+    }    
+}
+
+/* resize para tablet */
+@media only screen and (max-width: 768px){
+    [data-theme-color='dark']:root, :root{
+        --totalBar-position: relative;
+        --pocket-total-display: default;
+        --totalContainer-grid-template-columns: repeat(1, 1fr);
+        --container-grid-template-columns: repeat(2, 1fr);    
+    }    
+}
+
+/* resize para cell */
+@media only screen and (max-width: 600px){
+    [data-theme-color='dark']:root, :root{
+        --totalContainer-grid-template-columns: repeat(1, 1fr);
+        --container-grid-template-columns: repeat(1, 1fr);    
+    }
 }

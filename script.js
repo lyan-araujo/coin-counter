@@ -1,17 +1,47 @@
-let g_ckModoNoturno = document.getElementById('lblModoNoturno');
+let g_ckModoNoturno = document.querySelector('#lblModoNoturno');
+let g_ckTeclasDeAtalho = document.querySelector('#lblAtalhosTeclado');
 
-// FUNÇÃO DO MODO NOTURNO
-g_ckModoNoturno.addEventListener('change',(e) => {
-    // PEGA O ELEMENTO QUE CONTEM O PSEUDO-ATRIBUTO 'data-theme-color' E MUDA O VALOR DO MESMO ATRIBUTO COM BASE NO ESTADO DO g_ckModoNoturno
-    document.querySelector('[data-theme-color]').setAttribute('data-theme-color', (g_ckModoNoturno.checked ? 'light' : 'dark'));
-});
-
-// CARREGA QUANDO A PÁGINA É CARREGADA
-window.addEventListener('load', (event) =>{
+// EXECUTA QUANDO A PÁGINA É CARREGADA
+window.addEventListener('load', (e) => {
     CriarModelos();
 });
 
-// CRIA AS CÉCULAS DE MODELO DAS MOEDAS COM BASE NOS DADOS OBTIDOS PELA FUNÇÃO '_Dineiro.getModelos()'
+// EXIBE OU OCULTA OS INDICATIVOS DAS TECLAS DE ATALHO DE ACORDO COM O ESTADO DO 'g_ckTeclasDeAtalho'
+// _elemento.style.visibility = (g_ckTeclasDeAtalho.checked ? 'visible' : 'hidden');
+g_ckTeclasDeAtalho.addEventListener('change', (e) => {
+    let _elementos = document.querySelectorAll('.spanAtalho');
+    for (const _elemento of _elementos) {
+        _elemento.style.visibility = (g_ckTeclasDeAtalho.checked ? 'visible' : 'hidden');
+    }
+})
+
+// ATALHOS DE TECLADO
+// FUNCIONA APENAS SE 'g_ckTeclasDeAtalho.checked == true'
+// PEGA O 'event.code' E COMPARA COM TODOS OS MODELOS E, SE TRUE, EXECUTA UM EVENTO '.click()'
+// SE TRUE, CHAMA 'AtualiazaValor()' COM O ELEMENTO CLICADO
+document.addEventListener('keypress', (e) =>{
+    if(g_ckTeclasDeAtalho.checked){
+        let _modelos = _Dinheiro.getModelos();
+        for (const _modelo of _modelos) {
+            if(_modelo.atalho.code == e.code){
+                let _element = document.getElementById(_modelo.id);
+                _element.value++;
+                AtualizaValor(_element);
+            }
+        }
+    }
+});
+
+// FUNÇÃO DO MODO NOTURNO
+// EXECUTA SEMPRE QUE 'g_ckModoNoturno' MUDA SEU ESTADO
+// PEGA O ELEMENTO QUE CONTEM O PSEUDO-ATRIBUTO 'data-theme-color' E MUDA O VALOR DO MESMO ATRIBUTO COM BASE NO ESTADO DO 'g_ckModoNoturno'
+g_ckModoNoturno.addEventListener('change',(e) => {
+    document.querySelector('[data-theme-color]').setAttribute('data-theme-color', (g_ckModoNoturno.checked ? 'light' : 'dark'));
+});
+
+// FUNÇÃO QUE CRIA AS CELULAS DO GRID
+// CRIA AS CÉCULAS DE MODELO DAS MOEDAS E CEDULAS COM BASE NOS DADOS OBTIDOS PELA FUNÇÃO '_Dineiro.getModelos()'
+// CHAMA A FUNÇÃO 'ChangeInput()'
 function CriarModelos() {
     let _container = document.querySelector('#container');
     let _modelos = _Dinheiro.getModelos();
@@ -21,10 +51,10 @@ function CriarModelos() {
             <div class="container_dinheiro">
                 <label for="${_modelo.id}" class="labelImg"><img src="${_modelo.img}" onclick="(${_modelo.id}.value++), AtualizaValor(${_modelo.id})"></label>
                 <label for="${_modelo.id}" class="labelValue">${ConvertToBRL(_modelo.valor)}</label>
-                <input type="number" min="0" value="0" max="10000000000000000" id="${_modelo.id}" class="inputValue">
+                <input type="number" min="0" value="0" max="10000000000000000" id="${_modelo.id}" class="inputValue" oninput='AtualizaValor(this)'>
                 <input type="text" class="spanTotal" value="Total: R$ 0,00" data-span-for="${_modelo.id}" readonly/>
-                <button class="btnLimparUm" onclick="ApagarUm(${_modelo.id})"><img src="img/trash_placeholder.png"/></button>
-                <span class="spanAtalho">${_modelo.atalho}</span>
+                <button class="btnLimparUm" onclick="ApagarUm(${_modelo.id})"><img src="img/trash.png"/></button>
+                <span class="spanAtalho">${_modelo.atalho.char}</span>
             </div>
             ` 
             _container.insertAdjacentHTML("beforeend", _htmlContainer);
@@ -33,16 +63,13 @@ function CriarModelos() {
     }
 }
 
-function ChangeInput() {
-    let _inptValues = document.querySelectorAll('.inputValue');
-
-    _inptValues.forEach(_inputAtual =>{
-        _inputAtual.addEventListener('input', ()=> AtualizaValor(_inputAtual));
-    });
-}
-
+// FUNÇÃO PARA ATUALIZAR OS VALORES
+// NECESSARIAMENTE RECEBE UM ELEMENTO
+// CASO O VALOR DO INPUT ESTEJA VAZIO, ABAIXO DE 0 OU INDEFINIDO, O VALOR É ATUALIZADO PARA 0
+// CASO O VALOR DO INPUT ESTEJA ACIMA DO VALOR MAXIMO, O VALOR DO INPUT É SUBSTITUIDO PELO VALOR MAXIMO
+// CHAMA A FUNÇÃO '_Dinheiro.setModelos()'
 function AtualizaValor(DOMInput){
-    if((DOMInput.value == "")||(!DOMInput.value)){
+    if((DOMInput.value == "")||(DOMInput.value < 0)||(!DOMInput.value)){
         DOMInput.value = parseInt(DOMInput.getAttribute('min'), 10);
     }
 
@@ -53,6 +80,9 @@ function AtualizaValor(DOMInput){
     _Dinheiro.setModelos();
 }
 
+// FUNÇÃO PARA ZERAR TODOS OS CONTADORES
+// RESUMIDAMENTE, ALTERA TODOS OS VALORES REGISTRADOS PARA 0
+// CHAMA A FUNÇÃO '_Dinheiro.setModelos()'
 function ApagarTodos() {
     let _inptValues = document.querySelectorAll('.inputValue');
     for (const _inptValue of _inptValues) {
@@ -61,6 +91,13 @@ function ApagarTodos() {
     _Dinheiro.setModelos();
 }
 
+// FUNÇÃO PARA APAGAR APENAS UMA CLASSE DE DINHEIRO (MOEDAS | CEDULAS)
+// RECEBE UMA STRING INDICANDO QUAL CLASSE DEVE TER OS VALORES RESETADOS
+// PEGA TODOS OS ELEMENTOS DA CLASSE '.inputValue' E TODOS OS MODELOS
+// COMPARA COMPARA A CLASSE COM O VALOR E ATUALIZA SEMPRE QUE FOREM SEMELHANTES
+// SE A FUNÇÃO RECEBEU A STRING 'moedas' APAGARÁ TODOS OS INPUTS NA QUAL O VALOR ATRIBUIDO É <= 1
+// CASO CONTRARIO APAGARÁ TODOS OS INPUTS NA QUAL O VALOR ATRIBUIDO É > 1
+// CHAMA A FUNÇÃO '_Dinheiro.setModelos()'
 function ApagarParte(ModeloAtual) {
     let _inptValues = document.querySelectorAll('.inputValue');
     let _modelos = _Dinheiro.getModelos();
@@ -85,6 +122,9 @@ function ApagarParte(ModeloAtual) {
     _Dinheiro.setModelos();
 }
 
+// FUNÇÃO QUE APAGA APENAS UM INPUT ESPECIFICO
+// E É ISSO :D
+// CHAMA A FUNÇÃO '_Dinheiro.setModelos()'
 function ApagarUm(DOMInput) {
     if(DOMInput){
         DOMInput.value = 0;
@@ -93,14 +133,16 @@ function ApagarUm(DOMInput) {
     _Dinheiro.setModelos();
 }
 
-
-// RECEBE UM VALOR E RETORNA CONVERTIDO PARA O FORMATO DA MOEDA BRASILEIRA
+// FUNÇÃO PARA CONVERTER VALORES
+// RECEBE UM VALOR E O RETORNA CONVERTIDO PARA O FORMATO DA MOEDA BRASILEIRA (BRL)
 function ConvertToBRL(INT_VALUE) {
     let _intValue = INT_VALUE.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
     return _intValue;
 }
 
+// OBJETO COM A LISTA DE MODELOS, VALORES TOTAIS E FUNÇÕES QUE CONTROLAM O OBJETO
 let _Dinheiro = {
+    // LISTA DE MODELOS
     _DadosDinheiro : [
         {   
             
@@ -109,7 +151,10 @@ let _Dinheiro = {
             img : 'img/1_centavo.png',
             valor : 0.01,
             total : 0,
-            atalho : "Q"
+            atalho : {
+                char : "Q",
+                code : "KeyQ"
+            }
         },
         {   
             
@@ -118,7 +163,10 @@ let _Dinheiro = {
             img : 'img/5_centavos.png',
             valor : 0.05,
             total : 0,
-            atalho : "W"
+            atalho : {
+                char : "W",
+                code : "KeyW"
+            }
         },
         {   
             
@@ -127,7 +175,10 @@ let _Dinheiro = {
             img : 'img/10_centavos.png',
             valor : 0.10,
             total : 0,
-            atalho : "E"
+            atalho : {
+                char : "E",
+                code : "KeyE"
+            }
         },
         {   
             
@@ -136,7 +187,10 @@ let _Dinheiro = {
             img : 'img/25_centavos.png',
             valor : 0.25,
             total : 0,
-            atalho : "R"
+            atalho : {
+                char : "R",
+                code : "KeyR"
+            }
         },
         {   
             
@@ -145,7 +199,10 @@ let _Dinheiro = {
             img : 'img/50_centavos.png',
             valor : 0.50,
             total : 0,
-            atalho : "T"
+            atalho :  {
+                char : "T",
+                code : "KeyT"
+            }
         },
         {   
             
@@ -154,7 +211,10 @@ let _Dinheiro = {
             img : 'img/1_real.png',
             valor : 1,
             total : 0,
-            atalho : "Y"
+            atalho :  {
+                char : "Y",
+                code : "KeyY"
+            }
         },
         {   
             
@@ -163,7 +223,10 @@ let _Dinheiro = {
             img : 'img/02_reais.png',
             valor : 2,
             total : 0,
-            atalho : "A"
+            atalho :  {
+                char : "A",
+                code : "KeyA"
+            }
         },
         {   
             
@@ -172,7 +235,10 @@ let _Dinheiro = {
             img : 'img/05_reais.png',
             valor : 5,
             total : 0,
-            atalho : "S"
+            atalho :  {
+                char : "S",
+                code : "KeyS"
+            }
         },
         {   
             
@@ -181,7 +247,10 @@ let _Dinheiro = {
             img : 'img/10_reais.png',
             valor : 10,
             total : 0,
-            atalho : "D"
+            atalho :  {
+                char : "D",
+                code : "KeyD"
+            }
         },
         {   
             
@@ -190,7 +259,10 @@ let _Dinheiro = {
             img : 'img/20_reais.png',
             valor : 20,
             total : 0,
-            atalho : "F"
+            atalho :  {
+                char : "F",
+                code : "KeyF"
+            }
         },
         {   
             
@@ -199,7 +271,10 @@ let _Dinheiro = {
             img : 'img/50_reais.png',
             valor : 50,
             total : 0,
-            atalho : "G"
+            atalho :  {
+                char : "G",
+                code : "KeyG"
+            }
         },
         {   
             
@@ -208,7 +283,10 @@ let _Dinheiro = {
             img : 'img/100_reais.png',
             valor : 100,
             total : 0,
-            atalho : "H"
+            atalho :  {
+                char : "H",
+                code : "KeyH"
+            }
         },
         {   
             
@@ -217,24 +295,31 @@ let _Dinheiro = {
             img : 'img/200_reais.png',
             valor : 200,
             total : 0,
-            atalho : "J"
+            atalho :  {
+                char : "J",
+                code : "KeyJ"
+            }
         }
     ],
+    // OS VALORES TOTAIS SÃO SEPARADOS PARA FICAR MAIS FACIL DE OBTE-LOS
     _ValorTotal : {
         totalDinheiro : 0,
         totalCedulas : 0,
         totalMoedas: 0
     },
+    // FUNÇÃO QUE RETORNA A LISTA DE MODELOS
     getModelos : ()=>{
         return _Dinheiro._DadosDinheiro;
     },
+    // FUNÇÃO PARA ATRIBUIR NOVOS VALORES A LISTA DE MODELOS
+    //ATRIBUI O VALOR TOTAL DOS MODELOS RELATIVO A MULTIPLICAÇÃO DO VALOR DO INPULT COM O VALOR DA MOEDA (3 MOEDAS DE 25 = 3 x 0.25)
+    // CHAMA FUNÇÃO '_Dinheiro.atualizaDisplay()' 
     setModelos : ()=>{
         let _inptValues = document.querySelectorAll('.inputValue');
         let _modelos = _Dinheiro.getModelos();
         let [_ttlCedula, _ttlMoeda] = [0,0];
         let _valoresTotais = _Dinheiro._ValorTotal;
         
-        //ATRIBUI O VALOR TOTAL DOS MODELOS RELATIVO A MULTIPLICAÇÃO DO VALOR DO INPULT COM O VALOR DA MOEDA (3 MOEDAS DE 25 = 3 x 0.25)
         for (const _inptValue of _inptValues) {
             for (const _modelo of _modelos) {
                 if (_inptValue.id == _modelo.id) {
@@ -253,9 +338,12 @@ let _Dinheiro = {
         _valoresTotais.totalCedulas = _ttlCedula;
         _valoresTotais.totalMoedas = _ttlMoeda;
 
-        _Dinheiro.atualizaModelos();
+        _Dinheiro.atualizaDisplay();
     },
-    atualizaModelos : () =>{
+    // FUNÇÃO PARA EXIBIR OS DADOS PARA O CLIENTE
+    // PEGA TODOS OS VALORES E EXIBE ELES PARA O USUARIO PASSADOS PELA FUNÇÃO 'ConvertToBRL()' :D
+    // CHAMA A FUNÇÃO 'PocketTotalDisplay()' PASSANDO OS VALORES TOTAIS 
+    atualizaDisplay : () =>{
         let [_Modelos, _DisplayModelosTotais] = [_Dinheiro.getModelos(), document.querySelectorAll('.spanTotal')];
         let [_DisplayTotalDinheiro, _DisplayTotalCedula, _DisplayTotalMoeda] = [
             document.querySelector('#idTotalDinheiro'),
@@ -275,5 +363,22 @@ let _Dinheiro = {
                 }
             }
         }
+
+        PocketTotalDisplay(_Dinheiro._ValorTotal.totalDinheiro, _Dinheiro._ValorTotal.totalCedulas, _Dinheiro._ValorTotal.totalMoedas);
     }
 };
+
+// FUNÇÃO PARA ATUAIZAR OS VALORES DO DISPLAY COMPACTO
+// ACHEI NECESSARIO COLOCAR O MINI-DISPLAY DE VALORES PARA MELHOR VISUALIZAÇÃO EM DISPOSITIVOS COMPACTOS
+// ATUALIZA OS VALORES DO MINI-DISPLAY
+// O MINI-DISPLAY SÓ É EXIBIDO SE O DISPLAY DE VALORES TOTAIS PRINCIPAL ESTIVER FORA DA TELA  
+function PocketTotalDisplay(PkTotal, PkCedulas, PkMoedas){
+    let _totalCedulasElement = document.querySelector('#idTotalCedulas');
+    document.querySelector('#pocketTotalBar').style.visibility = (_totalCedulasElement.getBoundingClientRect().bottom <= 0 ? 'visible' : 'hidden');
+
+    document.querySelector('#idPocketTotalDinheiro').textContent = ConvertToBRL(PkTotal);
+    document.querySelector('#idPocketTotalCedulas').textContent = ConvertToBRL(PkCedulas);
+    document.querySelector('#idPocketTotalMoedas').textContent = ConvertToBRL(PkMoedas);
+
+}
+// COMENTEI TUDINHO PQ GOSTO DE DEIXAR MARCADO ;D

@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta>
     <title>Coin Counter | Lyan Araujo</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" async></script>
 </head>
 <body>
     <header>
-        <input type="checkbox" id="lblModoNoturno"/>
-        <label for="lblModoNoturno"></label>
-        <h1>
-            Coin Counter            
-        </h1>
+        <h1 id='title'>Coin Counter</h1>
     </header>
     <div id="totalBar">
         <div id="totalContainer">
@@ -35,8 +32,30 @@
             </div>
         </div>
     </div>
+    <div id="pocketTotalBar">
+        <span id="idPocketTotalDinheiro">R$ 0,00</span>
+        <span id="idPocketTotalCedulas">R$ 0,00</span>
+        <span id="idPocketTotalMoedas">R$ 0,00</span>
+    </div>
     <main>
         <div id="container"></div>
     </main>
+    <footer>
+        <div id="toolsBar">    
+            <label for="lblModoNoturno" class="toolbarContainer">
+                <input type="checkbox" id="lblModoNoturno"/>
+                <label for="lblModoNoturno"></label>
+            </label>        
+            <span class="toolbarContainer">
+                <input type="checkbox" id="lblAtalhosTeclado"/>
+                <label for="lblAtalhosTeclado">atalho</label>
+            </span>        
+        </div>
+        <p>feito com ❤ por Lyan Araujo</p>
+        <div>
+            <a href="https://github.com/lyan-araujo" target="_blank" title="Meu perfil do Github">Github</a>
+            <a href="https://www.instagram.com/lyanlipy/" target="_blank" title="Meu perfil do Instagram">Instagram</a>
+        </div>
+    </footer>
 </body>
 </html>
