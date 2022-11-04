@@ -71,20 +71,20 @@ header #title{
 #totalContainer{
     display: grid;
     grid-template-columns: var(--totalContainer-grid-template-columns);
-    gap: 10px;
+    gap: 8px;
     max-height: 100%;
-    margin: 10px auto;
-    padding: 10px;
+    margin: 8px auto;
+    padding: 8px;
 }
 
 #totalContainer div{
     display: grid;
     grid-template-columns: 1fr;
-    gap: 6px;
+    gap: 8px;
     max-width: 100%;
     background-color: var(--secondary-color);
     border-radius: 10px;
-    padding: 8px 5px;
+    padding: 8px 4px;
     grid-auto-flow: row;
 }
 
@@ -97,32 +97,32 @@ header #title{
     font-size: large;
     text-align: center;
     border: none;
-    padding: 5px;
-    border-radius: 5px;
+    padding: 4px;
+    border-radius: 4px;
     background: var(--tertiary-color);
 }
 
 #totalContainer div button{
     border: none;
     background-color: var(--tertiary-color);
-    border-radius: 5px;
-    padding: 3px;
+    border-radius: 4px;
+    padding: 4px;
     cursor: pointer;
     font-size: medium;
 }
 
 #totalContainer div button:hover{
     transition: transform 200ms;
-    box-shadow: 0px 0px 5px 1px var(--primary-color);
+    box-shadow: 0px 0px 4px 1px var(--primary-color);
 }
 
 #pocketTotalBar{
     position: fixed;
-    top: 3px;
-    left: 3px;
+    top: 4px;
+    left: 4px;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 5px;
+    gap: 4px;
     max-width: 768px;
     z-index: 1;
 }
@@ -135,7 +135,7 @@ header #title{
     background-color: var(--tertiary-color);
     border: 2px solid var(--secondary-color);
     box-shadow: 2px 2px 2px var(--primary-color);
-    border-radius: 5px;
+    border-radius: 6px;
     padding: 2px 4px;
     font-size: medium;
     white-space: nowrap;
@@ -143,10 +143,10 @@ header #title{
 }
 
 main{
-    border: 3px solid var(--primary-color);
+    border: 4px solid var(--primary-color);
     background-color: var(--secondary-color);
     box-shadow: 0px 0px 0px 2px var(--secondary-color);
-    border-radius: 5px;
+    border-radius: 6px;
     max-width: 1000px;
     margin: auto auto 2rem auto;
 }
@@ -155,22 +155,22 @@ main{
     display: grid;
     grid-template-columns: var(--container-grid-template-columns);
     max-width: 100%;
-    padding: 5px;
-    gap: 10px;
+    padding: 6px;
+    gap: 8px;
 }
 
 #container .container_dinheiro{
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px 8px;
-    padding: 5px;
-    min-width: 200px;
-    max-width: 350px;
+    gap: 4px 8px;
+    padding: 4px;
+    min-width: 208px;
+    max-width: 358px;
     height: 100%;
     border-radius: 4px;
-    border: 3px solid var(--tertiary-color);
+    border: 2px solid var(--tertiary-color);
     background-color: var(--secondary-color);
-    box-shadow: 1px 1px 5px 2px var(--primary-color);
+    box-shadow: 1px 1px 6px 2px var(--primary-color);
     margin: auto;
 }
 
@@ -193,7 +193,7 @@ main{
 #container .container_dinheiro > .divImg > img:hover{
     transform: scale(1.1);
     transition: transform 300ms;
-    filter: drop-shadow(0px 0px 5px var(--revert-color));
+    filter: drop-shadow(0px 0px 6px var(--revert-color));
 }
 
 #container .container_dinheiro > .labelValue{
@@ -233,12 +233,12 @@ main{
     grid-column: 7;
     grid-row: 3;
     cursor: pointer;
-    min-width: 25px;
+    min-width: 24px;
 }
 
 #container .container_dinheiro > .btnLimparUm img{
     user-select: none;
-    filter: drop-shadow(0px 0px 1px white);
+    filter: drop-shadow(0px 0px 2px white);
     
 }
 
@@ -248,7 +248,7 @@ main{
     justify-content: center;
     visibility: hidden;
     text-align: center;
-    border-width: 1px 5px 5px 1px;
+    border-width: 2px 6px 6px 2px;
     border-style: solid;
     border-color:var(--tertiary-color) var(--primary-color);
     border-radius: 2px;
@@ -258,40 +258,40 @@ main{
     grid-row: 1;
     aspect-ratio: 1 / 1;
     cursor: default;
-    opacity: 80%;    
+    opacity: 85%;    
 }
 
 /* OS PEQUENOS BOTÕES FLUTUANTES NO CANTO INFERIOR ESQUERDO DA TELA */
 #toolsBar{
     display: grid;
     position: sticky;
-    left: 5px;
+    left: 6px;
     bottom: 8px;
     margin-bottom: 1rem;
-    border-radius: 10px;
+    border-radius: 8px;
     max-width: max-content;
     grid-template-columns: repeat(2, 1fr);
     border: 2px solid var(--primary-color);
     background-color: var(--secondary-color);
     box-shadow: 0px 0px 0px 2px var(--secondary-color);
-    opacity: 90%;
+    opacity: 92%;
 }
 
 #toolsBar .toolbarContainer{
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1px 3px;
+    padding: 2px 4px;
     background-color: var(--secondary-color);
     cursor: pointer;
 }
 
 #toolsBar .toolbarContainer:nth-child(1){
-    border-radius: 10px 0px 0px 10px
+    border-radius: 8px 0px 0px 8px
 }
 
 #toolsBar .toolbarContainer:nth-child(2){
-    border-radius: 0px 10px 10px 0px
+    border-radius: 0px 8px 8px 0px
 }
 
 #toolsBar .toolbarContainer:hover{
@@ -315,7 +315,7 @@ input#lblModoNoturno{
     width: 1.6rem;
     aspect-ratio: 1 / 1;
     background: whitesmoke;
-    margin: 5px;
+    margin: 6px;
     border-radius: 1rem;
     transition: 500ms;
 }
@@ -337,7 +337,7 @@ input#lblModoNoturno{
     justify-content: center;
     aspect-ratio: 1 / 1;
     background: conic-gradient(from 330deg, orange 0% 10%, transparent 12% 18%, orange 20% 30%, transparent 32% 38%, orange 40% 50%, transparent 52% 58%, orange 60% 70%, transparent 72% 78%, orange 80% 90%, transparent 92% 98%, orange);
-    margin: 5px;
+    margin: 6px;
     border-radius: 1rem;
 }
 
@@ -366,7 +366,7 @@ label[for='lblAtalhosTeclado']{
     border-radius: 4px;
     background: var(--secondary-color);
     cursor: pointer;
-    padding: 5px;
+    padding: 6px;
     filter: none;
 }
 
@@ -391,7 +391,7 @@ footer{
     flex-direction: row;
     max-width: 90%;
     margin-bottom: 1rem;
-    gap: 16px;
+    gap: 32px;
     align-items: center;
     justify-content: center;
 }
