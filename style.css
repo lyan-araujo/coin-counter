@@ -3,6 +3,7 @@
     max-width: 100%;
     font-family: 'Times New Roman', Times, serif;
     user-select: text;
+    scroll-behavior: smooth;
 }
 
 /* VALORES DO MODO DARK (PADRÃO) */
@@ -33,7 +34,6 @@ html, body{
     background-color: var(--primary-color);
     padding: 0%;
     margin: 0%;
-    scroll-behavior: smooth;
 }
 
 noscript dialog{
@@ -174,7 +174,7 @@ main{
     margin: auto;
 }
 
-#container .container_dinheiro > .labelImg{
+#container .container_dinheiro > .divImg{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -183,14 +183,14 @@ main{
     cursor: pointer;
 }
 
-#container .container_dinheiro > .labelImg > img{
+#container .container_dinheiro > .divImg > img{
     user-select: none;
     display: block;
     width: auto;
     max-height: 140px;
 }
 
-#container .container_dinheiro > .labelImg > img:hover{
+#container .container_dinheiro > .divImg > img:hover{
     transform: scale(1.1);
     transition: transform 300ms;
     filter: drop-shadow(0px 0px 5px var(--revert-color));
@@ -261,23 +261,13 @@ main{
     opacity: 80%;    
 }
 
-/* FOOTER */
-footer{
-    border-style: solid;
-    border-color: var(--revert-color);
-    border-width: 1px 0px 0px 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
 /* OS PEQUENOS BOTÕES FLUTUANTES NO CANTO INFERIOR ESQUERDO DA TELA */
 #toolsBar{
     display: grid;
-    position: fixed;
+    position: sticky;
     left: 5px;
     bottom: 8px;
+    margin-bottom: 1rem;
     border-radius: 10px;
     max-width: max-content;
     grid-template-columns: repeat(2, 1fr);
@@ -384,12 +374,24 @@ label[for='lblAtalhosTeclado']{
     filter: brightness(1.3);
 }
 
+/* FOOTER */
+footer{
+    border-style: solid;
+    border-color: var(--revert-color);
+    border-width: 1px 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 #linkRedesSociais{
     display: flex;
     width: fit-content;
+    flex-direction: row;
     max-width: 90%;
     margin-bottom: 1rem;
-    gap: 8px;
+    gap: 16px;
     align-items: center;
     justify-content: center;
 }
@@ -401,7 +403,7 @@ label[for='lblAtalhosTeclado']{
 
 #linkRedesSociais > a:hover{
     transition: 300ms transform;
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
 #linkRedesSociais > a > i{

@@ -42,14 +42,14 @@ g_ckModoNoturno.addEventListener('change',(e) => {
 // FUNÇÃO QUE CRIA AS CELULAS DO GRID
 // CRIA AS CÉCULAS DE MODELO DAS MOEDAS E CEDULAS COM BASE NOS DADOS OBTIDOS PELA FUNÇÃO '_Dineiro.getModelos()'
 // CHAMA A FUNÇÃO 'ChangeInput()'
-function CriarModelos() {
+function CriarModelos() { 
     let _container = document.querySelector('#container');
     let _modelos = _Dinheiro.getModelos();
     if(_modelos){
         for (const _modelo of _modelos) {
             let _htmlContainer =`
             <div class="container_dinheiro">
-                <label for="${_modelo.id}" class="labelImg"><img src="${_modelo.img}" onclick="(${_modelo.id}.value++), AtualizaValor(${_modelo.id})"></label>
+                <div class="divImg"><img src="${_modelo.img}" onclick="(${_modelo.id}.value++), AtualizaValor(${_modelo.id})"></div>
                 <label for="${_modelo.id}" class="labelValue">${ConvertToBRL(_modelo.valor)}</label>
                 <input type="number" min="0" value="0" max="10000000000000000" id="${_modelo.id}" class="inputValue" oninput='AtualizaValor(this)'>
                 <input type="text" class="spanTotal" value="Total: R$ 0,00" data-span-for="${_modelo.id}" readonly/>
